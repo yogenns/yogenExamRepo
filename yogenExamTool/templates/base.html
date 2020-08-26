@@ -45,7 +45,7 @@
                     <li><a class="btn btn-simple" href="{% url 'exam_app:logout' %}">Log Out</a></li>
                     {% else %}
                     <li>
-                        <a class="btn btn-simple" href="#">Sign Up</a>
+                        <a class="btn btn-simple" href="{% url 'exam_app:signup' %}">Sign Up</a>
                     </li>
                     <li>
                         <a class="btn btn-simple" href="{% url 'exam_app:login' %}">Log In</a>
