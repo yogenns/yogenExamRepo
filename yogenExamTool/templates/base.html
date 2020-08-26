@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <title>Exam Tool</title>
+    <link rel="stylesheet" href="{% static 'exam_app/css/master.css'%}">
+    <link rel="stylesheet" href="{% static 'bootstrap-4.5.2-dist/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'bootstrap-4.5.2-dist/css/bootstrap-grid.min.css'%}">
+</head>
+
+<body>
+    <nav class=" navbar navbar-expand-lg navbar-light mynav">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'exam_app:home' %}">Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav nabar-nav mr-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">Manage</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% if user.is_superuser %}
+                            <a class="dropdown-item" href="#">Add Exam</a>
+                            <a class="dropdown-item" href="#">Add Section</a>
+                            <a class="dropdown-item" href="#">Add Question</a>
+                            <a class="dropdown-item" href="#">Questions</a>
+                            {% else %}
+                            <a class="dropdown-item" href="#">Exams</a>
+                            <a class="dropdown-item" href="#">History</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="nav nabar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                    <li><a class="btn btn-simple" href="#">Log Out</a></li>
+                    {% else %}
+                    <li>
+                        <a class="btn btn-simple" href="#">Sign Up</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-simple" href="#">Log In</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        {% block body_block %}
+        {% endblock %}
+    </div>
+</body>
+
+</html>
