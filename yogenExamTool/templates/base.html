@@ -42,7 +42,7 @@
                 </ul>
                 <ul class="nav nabar-nav navbar-right">
                     {% if user.is_authenticated %}
-                    <li><a class="btn btn-simple" href="#">Log Out</a></li>
+                    <li><a class="btn btn-simple" href="{% url 'exam_app:logout' %}">Log Out</a></li>
                     {% else %}
                     <li>
                         <a class="btn btn-simple" href="#">Sign Up</a>
