@@ -29,7 +29,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             {% if user.is_superuser %}
                             <a class="dropdown-item" href="#">Add Exam</a>
-                            <a class="dropdown-item" href="#">Add Section</a>
+                            <a class="dropdown-item" href="{% url 'exam_app:topic' %}">Add Topic</a>
                             <a class="dropdown-item" href="#">Add Question</a>
                             <a class="dropdown-item" href="#">Questions</a>
                             {% else %}

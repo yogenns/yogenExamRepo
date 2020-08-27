@@ -9,4 +9,5 @@ urlpatterns = [
     url('login/', auth_views.LoginView.as_view(template_name='exam_app/login.html'), name='login'),
     url('logout/', auth_views.LogoutView.as_view(), name='logout'),
     url('signup/', views.SignUp.as_view(), name='signup'),
+    url('topic/', views.CreateTopicView.as_view(), name='topic'),
 ]
