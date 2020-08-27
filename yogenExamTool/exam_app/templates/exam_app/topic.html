@@ -3,28 +3,76 @@
 {% block body_block %}
 <div class="container">
     <h1>Topic</h1>
-    <form method="POST">
+    <form name="f1" id="f1" method="POST">
         {% csrf_token %}
         {% bootstrap_form form %}
         <input type="submit" class="btn btn-primary" value="Create">
     </form>
     <hr>
     <h3>Existing Topics List</h3>
+    <div class="toolbar">
+        <form id="form-btn" name="form-btn" action="/topic/delete/" method="POST">
+            {% csrf_token %}
+            <button id="remove" class="btn btn-danger" disabled onclick="remove()">Delete</button>
+            <input type="hidden" id="selectedRows" name="selectedRows">
+        </form>
+    </div>
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">#</th>
+                {% if topic_list %}
+                <th scope="col"><input type="checkbox" class="largerCheckbox" id="all" onchange="setSelection(this)">
+                </th>
+                {% else %}
+                <th>#</th>
+                {% endif %}
                 <th scope="col">Name</th>
             </tr>
         </thead>
         <tbody>
             {% for topic in topic_list %}
             <tr>
-                <th scope="row">{{topic.pk}}</th>
+                <th scope="row">
+                    <input type="checkbox" class="largerCheckbox" id="{{topic.pk}}" onchange="setSelection(this)">
+                </th>
                 <td>{{topic.name}}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No Topics Found</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+<script>
+    selections = []
+    function remove() {
+        var form_btn = document.getElementById('form-btn')
+        form_btn.submit()
+    }
+    function setSelection(temp) {
+
+        if (temp.checked == true) {
+            selections.push(temp.id)
+            if (temp.id === 'all') {
+                $(".largerCheckbox").prop('checked', true);
+            }
+        }
+        else {
+            if (temp.id === 'all') {
+                $(".largerCheckbox").prop('checked', false);
+            }
+            selections.splice(selections.indexOf(temp.id), 1)
+        }
+        if (selections.length > 0) {
+            $("#remove").prop('disabled', false)
+
+        } else {
+            $("#remove").prop('disabled', true)
+        }
+        console.log(selections);
+        document.getElementById('selectedRows').value = selections
+    }
+</script>
 {% endblock %}

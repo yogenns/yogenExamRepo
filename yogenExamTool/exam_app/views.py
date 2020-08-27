@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from . import forms
 from . import models
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 
@@ -17,7 +19,13 @@ class SignUp(CreateView):
     template_name = 'exam_app/signup.html'
 
 
-class CreateTopicView(CreateView):
+class SuperUserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class CreateTopicView(SuperUserRequiredMixin, CreateView):
     form_class = forms.CreateTopicForm
     success_url = reverse_lazy('exam_app:topic')
     template_name = 'exam_app/topic.html'
@@ -25,3 +33,24 @@ class CreateTopicView(CreateView):
     def get_context_data(self, **kwargs):
         kwargs['topic_list'] = models.Topic.objects.order_by('id')
         return super(CreateTopicView, self).get_context_data(**kwargs)
+
+
+class DeleteTopicView(SuperUserRequiredMixin, DeleteView):
+    model = models.Topic
+    success_url = reverse_lazy('exam_app:topic')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        selected_list = self.request.POST.get("selectedRows").split(',')
+        if 'all' in selected_list:
+            return queryset
+        else:
+            print(selected_list)
+            return queryset.filter(pk__in=selected_list)
+
+    def delete(self, *args, **kwargs):
+        topics = self.get_queryset()
+        print("Deleting Topic")
+        print(topics)
+        topics.delete()
+        return HttpResponseRedirect('/topic/')
