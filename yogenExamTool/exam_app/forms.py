@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Topic
+from .models import Topic, Question
 
 
 class CreateUserForm(UserCreationForm):
@@ -19,4 +19,15 @@ class CreateTopicForm(forms.ModelForm):
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'textinputclass'}),
+        }
+
+
+class CreateQuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ('question', 'options', 'answer',
+                  '_question_type', 'topic', 'explaination')
+
+        widgets = {
+            'answer': forms.TextInput(attrs={'class': 'textinputclass'}),
         }

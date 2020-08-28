@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, DeleteView
+from django.views.generic import TemplateView, CreateView, DeleteView, ListView
 from django.urls import reverse_lazy
 from . import forms
 from . import models
@@ -54,3 +54,17 @@ class DeleteTopicView(SuperUserRequiredMixin, DeleteView):
         print(topics)
         topics.delete()
         return HttpResponseRedirect('/topic/')
+
+
+class CreateQuestionView(SuperUserRequiredMixin, CreateView):
+    form_class = forms.CreateQuestionForm
+    success_url = reverse_lazy('exam_app:questions')
+    template_name = 'exam_app/add_question.html'
+
+
+class ListQuestionView(SuperUserRequiredMixin, ListView):
+    model = models.Question
+    paginate_by = 10
+
+    def get_queryset(self):
+        return models.Question.objects.all().order_by('pk')
