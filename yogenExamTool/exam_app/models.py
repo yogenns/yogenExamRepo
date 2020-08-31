@@ -22,17 +22,16 @@ class Question(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     explaination = models.TextField()
 
-    # def set_answer(self, x):
-    #    self.answer = json.dumps(x)
-
-    # def get_answer(self):
-    #    return json.loads(self.answer)
-
-    # def set_options(self, x):
-    #    self.options = json.dumps(x)
-
-    # def get_options(self):
-    #    return json.loads(self.options)
-
     def question_type(self):
         return (dict(self.QUESTION_TYPES))[self._question_type]
+
+
+class Exam(models.Model):
+    name = models.TextField()
+    question_count = models.PositiveSmallIntegerField()
+    questions = models.ManyToManyField(Question)
+    time = models.TimeField()
+    passing_percentage = models.DecimalField(max_digits=4, decimal_places=2)
+
+    def __str__(self):
+        return self.name
