@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 {% load bootstrap4 %}
 {% block body_block %}
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == 'success' %}
+<div class="alert alert-success"> {{ message }} </div>
+{% endif %}
+{% endfor %}
+{% endif %}
 <form name="f1" id="f1" method="POST">
     {% csrf_token %}
     {% bootstrap_form form %}
-    <input type="submit" class="btn btn-primary" value="Add">
+    <input type="submit" class="btn btn-success" value="Add">
 </form>
 {% endblock %}

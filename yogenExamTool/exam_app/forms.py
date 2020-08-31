@@ -22,12 +22,29 @@ class CreateTopicForm(forms.ModelForm):
         }
 
 
-class CreateQuestionForm(forms.ModelForm):
-    class Meta:
-        model = Question
-        fields = ('question', 'options', 'answer',
-                  '_question_type', 'topic', 'explaination')
+class CreateQuestionForm(forms.Form):
+    QUESTION_TYPES = (
+        ('', '----'),
+        ('M', 'Multiple Selection'),
+        ('S', 'Single Selection')
+    )
+    question = forms.CharField(widget=forms.Textarea)
+    option_field_A = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Enter Option'}), label="Option 'A'")
+    option_field_B = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Enter Option'}), label="Option 'B'")
+    option_field_C = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Enter Option'}), label="Option 'C'", required=False)
+    option_field_D = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Enter Option'}), label="Option 'D'", required=False)
+    option_field_E = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Enter Option'}), label="Option 'E'", required=False)
+    option_field_F = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Enter Option'}), label="Option 'F'", required=False)
 
-        widgets = {
-            'answer': forms.TextInput(attrs={'class': 'textinputclass'}),
-        }
+    answer = forms.CharField(widget=forms.TextInput(attrs={
+        'placeholder': 'Enter Answer e.g. A,C'}), label="Answers (Enter the Option Label. In case of multiple separate by comma)")
+    question_type = forms.ChoiceField(choices=QUESTION_TYPES)
+    topic = forms.ModelChoiceField(queryset=Topic.objects.all())
+    explaination = forms.CharField(widget=forms.Textarea(
+        attrs={'placeholder': 'Provide Explaination'}))
