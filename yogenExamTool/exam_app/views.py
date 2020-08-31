@@ -127,3 +127,11 @@ class CreateExamView(SuperUserRequiredMixin, FormView):
         form.save()
         messages.success(self.request, 'Exam Added successfully')
         return super().form_valid(form)
+
+
+class ListExamView(SuperUserRequiredMixin, ListView):
+    model = models.Exam
+    paginate_by = 10
+
+    def get_queryset(self):
+        return models.Exam.objects.all().order_by('pk')

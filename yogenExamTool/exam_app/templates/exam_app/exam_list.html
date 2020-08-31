@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block body_block %}
+<table id="table" class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col" data-checkbox="true">#</th>
+            <th scope="col">Exam</th>
+            <th scope="col">Question Count</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Passing Criteria</th>
+            <th scope="col">Topics</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for exam in exam_list %}
+        <tr>
+            <th scope="row">
+                <input type="checkbox" class="largerCheckbox" id="{{ exam.pk}}" onchange="setSelection(this)">
+            </th>
+            <td>{{ exam.name}}</td>
+            <td>{{ exam.question_count}}</td>
+            <td>{{ exam.time}}</td>
+            <td>{{ exam.passing_percentage}}</td>
+            <td>
+                {% regroup exam.questions.all by topic as topic_list %}
+                {% for topic in topic_list %}
+                {{topic.grouper}},
+                {% empty %}
+                All
+                {% endfor %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">Exam List is Empty</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<nav aria-label="PageNavigation" class="page-nav">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item ">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{num}}<span
+                    class="sr-only">(current)</span></a>
+        </li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{num}}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock %}
