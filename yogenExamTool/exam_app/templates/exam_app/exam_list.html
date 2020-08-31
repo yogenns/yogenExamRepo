@@ -25,7 +25,7 @@
                 <input type="checkbox" class="largerCheckbox" id="{{ exam.pk}}" onchange="setSelection(this)">
             </th>
             <td>{{ exam.name}}</td>
-            <td>{{ exam.question_count}}</td>
+            <td><a href="/questions/?exam_id={{exam.pk}}">{{ exam.question_count}}</a></td>
             <td>{{ exam.time}}</td>
             <td>{{ exam.passing_percentage}}</td>
             <td>

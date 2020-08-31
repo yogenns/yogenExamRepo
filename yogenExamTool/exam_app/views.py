@@ -93,7 +93,11 @@ class ListQuestionView(SuperUserRequiredMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return models.Question.objects.all().order_by('pk')
+        exam_id = self.request.GET.get("exam_id")
+        if exam_id != '' and exam_id != None:
+            return models.Question.objects.filter(exam=exam_id).order_by('pk')
+        else:
+            return models.Question.objects.all().order_by('pk')
 
 
 class DeleteQuestionView(SuperUserRequiredMixin, DeleteView):
