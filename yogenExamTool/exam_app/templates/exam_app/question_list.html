@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% block body_block %}
 <h2>Question List</h2>
+<div class="toolbar">
+    <form id="form-btn" name="form-btn" action="/question/delete/" method="POST">
+        {% csrf_token %}
+        <button id="remove" class="btn btn-danger" disabled onclick="remove()">Delete</button>
+        <input type="hidden" id="selectedRows" name="selectedRows">
+    </form>
+</div>
 <table id="table" class="table table-striped">
     <thead>
         <tr>
@@ -15,9 +22,9 @@
     </thead>
     <tbody>
         {% for question in question_list %}
-        <tr id="{{ question.pk}}">
+        <tr>
             <th scope="row">
-                <input type="checkbox" class="largerCheckbox" id="{ question.pk}}">
+                <input type="checkbox" class="largerCheckbox" id="{{ question.pk}}" onchange="setSelection(this)">
             </th>
             <td>{{ question.question}}</td>
             <td>{{ question.options}}</td>
@@ -66,5 +73,34 @@
         {% endif %}
     </ul>
 </nav>
+<script>
+    selections = []
+    function remove() {
+        var form_btn = document.getElementById('form-btn')
+        form_btn.submit()
+    }
+    function setSelection(temp) {
 
+        if (temp.checked == true) {
+            selections.push(temp.id)
+            if (temp.id === 'all') {
+                $(".largerCheckbox").prop('checked', true);
+            }
+        }
+        else {
+            if (temp.id === 'all') {
+                $(".largerCheckbox").prop('checked', false);
+            }
+            selections.splice(selections.indexOf(temp.id), 1)
+        }
+        if (selections.length > 0) {
+            $("#remove").prop('disabled', false)
+
+        } else {
+            $("#remove").prop('disabled', true)
+        }
+        console.log(selections);
+        document.getElementById('selectedRows').value = selections
+    }
+</script>
 {% endblock %}

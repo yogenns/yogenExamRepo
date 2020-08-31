@@ -94,3 +94,24 @@ class ListQuestionView(SuperUserRequiredMixin, ListView):
 
     def get_queryset(self):
         return models.Question.objects.all().order_by('pk')
+
+
+class DeleteQuestionView(SuperUserRequiredMixin, DeleteView):
+    model = models.Question
+    success_url = reverse_lazy('exam_app:questions')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        selected_list = self.request.POST.get("selectedRows").split(',')
+        if 'all' in selected_list:
+            return queryset
+        else:
+            print(selected_list)
+            return queryset.filter(pk__in=selected_list)
+
+    def delete(self, *args, **kwargs):
+        questions = self.get_queryset()
+        print("Deleting Questions")
+        print(questions)
+        questions.delete()
+        return HttpResponseRedirect('/questions/')

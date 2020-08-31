@@ -13,4 +13,6 @@ urlpatterns = [
     url('^topic/delete/$', views.DeleteTopicView.as_view(), name='topic_delete'),
     url('^question/add/$', views.CreateQuestionView.as_view(), name='create_question'),
     url('^questions/$', views.ListQuestionView.as_view(), name='questions'),
+    url('^question/delete/$', views.DeleteQuestionView.as_view(),
+        name='question_delete'),
 ]
