@@ -15,4 +15,5 @@ urlpatterns = [
     url('^questions/$', views.ListQuestionView.as_view(), name='questions'),
     url('^question/delete/$', views.DeleteQuestionView.as_view(),
         name='question_delete'),
+    url('^exam/add/$', views.CreateExamView.as_view(), name='create_exam'),
 ]

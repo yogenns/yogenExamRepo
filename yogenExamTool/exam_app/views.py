@@ -115,3 +115,15 @@ class DeleteQuestionView(SuperUserRequiredMixin, DeleteView):
         print(questions)
         questions.delete()
         return HttpResponseRedirect('/questions/')
+
+
+class CreateExamView(SuperUserRequiredMixin, FormView):
+    form_class = forms.CreateExamForm
+    success_url = reverse_lazy('exam_app:create_exam')
+    template_name = 'exam_app/add_exam.html'
+    success_message = "Success YY"
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, 'Exam Added successfully')
+        return super().form_valid(form)

@@ -25,6 +25,9 @@ class Question(models.Model):
     def question_type(self):
         return (dict(self.QUESTION_TYPES))[self._question_type]
 
+    def __str__(self):
+        return self.question
+
 
 class Exam(models.Model):
     name = models.TextField()
