@@ -1,4 +1,15 @@
 {% extends "base.html" %}
 {% block body_block %}
-<h1>Home Page</h1>
+{% if user.is_authenticated %}
+{% if user.is_superuser %}
+<p>Welcome, {{user}}. You are an admin</p>
+{% include "exam_app/_admin_home.html" %}
+{% else %}
+<p>Welcome, {{user}}</p>
+{% include "exam_app/_user_home.html" %}
+{% endif %}
+{% else %}
+<p>This is a simple Exam Tool. An adminstrator can create a question bank and setup exam. A user can select an exam and
+    solve it. Login to Continue...</p>
+{% endif %}
 {% endblock %}

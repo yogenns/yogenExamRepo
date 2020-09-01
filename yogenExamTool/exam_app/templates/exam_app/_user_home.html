@@ -1,0 +1,19 @@
+<h3>Exams Available</h3>
+<table class="table">
+    <tr class="row justify-content-md-center">
+        {% for exam in exam_list %}
+        <td class="col-lg-2 col-md-3 card-block exam-card">
+
+            <span class="exam-title">{{ exam.name }}</span>
+            <br>
+            <span>Duration : {{ exam.time|time:"H\h i\m" }}</span>
+            <br>
+            <span>Total Questions : {{ exam.question_count }}</span>
+            <br>
+            <span>Passing Criteria : {{ exam.passing_percentage }}%</span>
+            <br>
+            <input type="button" class="btn btn-success" value="Start Exam">
+        </td>
+        {% endfor %}
+    </tr>
+</table>

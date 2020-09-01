@@ -14,6 +14,14 @@ from django.http import HttpResponseRedirect
 class HomeView(TemplateView):
     template_name = 'exam_app/home.html'
 
+    def get_context_data(self, **kwargs):
+
+        if self.request.user.is_authenticated:
+            if not self.request.user.is_superuser:
+                # If user is authenticated and is NOT a super user show exam list
+                kwargs['exam_list'] = models.Exam.objects.all().order_by('pk')
+        return super(HomeView, self).get_context_data(**kwargs)
+
 
 class SignUp(CreateView):
     form_class = forms.CreateUserForm
