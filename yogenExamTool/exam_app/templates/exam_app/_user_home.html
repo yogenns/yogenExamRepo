@@ -12,8 +12,49 @@
             <br>
             <span>Passing Criteria : {{ exam.passing_percentage }}%</span>
             <br>
-            <input type="button" class="btn btn-success" value="Start Exam">
+            <input type="button" class="btn btn-success" value="Start Exam" data-toggle="modal"
+                data-target="#confirmModal" data-exam-name="{{exam.name}}" data-exam-id="{{exam.pk}}">
         </td>
         {% endfor %}
     </tr>
 </table>
+<form id="start-exam" name="start-exam" method="POST" action="/start/">
+    {% csrf_token %}
+    <input type="hidden" id="exam-id" name="exam-id" value="">
+</form>
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you really want to start exam <span id="examName"></span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="start_exam()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $('#confirmModal').on('show.bs.modal', function (e) {
+        var examName = $(e.relatedTarget).data('exam-name');
+        var examId = $(e.relatedTarget).data('exam-id');
+        $(e.currentTarget).find('#examName').text(examName);
+        var form_id = document.getElementById('exam-id')
+        form_id.value = examId
+    });
+    function start_exam() {
+        var form_btn = document.getElementById('start-exam')
+        form_btn.submit()
+    }
+
+</script>

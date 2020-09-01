@@ -1,6 +1,6 @@
 from django.views.generic.edit import FormView
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, CreateView, DeleteView, ListView
 from django.urls import reverse_lazy
 from . import forms
@@ -168,3 +168,16 @@ class DeleteExamView(SuperUserRequiredMixin, DeleteView):
         print(exams)
         exams.delete()
         return HttpResponseRedirect('/exams/')
+
+
+class StartExamView(LoginRequiredMixin, TemplateView):
+    template_name = 'exam_app/start_exam.html'
+
+    def post(self, request, **kwargs):
+        exam_id = request.POST.get('exam-id')
+        context = self.get_context_data()
+        context['exam_obj'] = get_object_or_404(models.Exam, pk=exam_id)
+        return render(request, self.template_name, context)
+
+    def get(self, request, **kwargs):
+        return HttpResponseRedirect('/')

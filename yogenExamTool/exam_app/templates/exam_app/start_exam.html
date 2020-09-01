@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load exam_filters %}
+{% block body_block %}
+<div class="container">
+    <form id="f1" name="f1" method="POST" action="/submit_exam/">
+        <nav aria-label="PageNavigation" class="page-nav">
+            <ul class="pagination">
+                <li class="page-item ">
+                    <a class="page-link" href="#carouselExampleIndicators" role="button" data-slide="prev" tabindex="-1"
+                        onclick="carouselChangePrev()">Previous</a>
+                </li>
+                {% for num in exam_obj.question_count|times %}
+                {% if 1 == num %}
+                <li class="page-item active"><a class="page-link" id="{{num}}" href="#"
+                        onclick="setcarouselActive(this.id)">{{num}}<span class="sr-only">(current)</span></a>
+                </li>
+                {% else %}
+                <li class="page-item"><a class="page-link" id="{{num}}" href="#"
+                        onclick="setcarouselActive(this.id)">{{num}}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+                <li class="page-item">
+                    <a class="page-link" href="#carouselExampleIndicators" role="button" data-slide="next"
+                        onclick="carouselChangeNext()">Next</a>
+                </li>
+            </ul>
+        </nav>
+        <div id="carouselExampleIndicators" class="carousel" data-interval="false" data-wrap="false">
+            <div class="carousel-inner">
+                {% for question in exam_obj.questions.all %}
+                {% if forloop.counter == 1 %}
+                <div id="carousel-{{forloop.counter}}" class="carousel-item active">
+                    {% else %}
+                    <div id="carousel-{{forloop.counter}}" class="carousel-item ">
+                        {% endif %}
+                        <div class="card col-md-3">
+                            <div class="card-body">
+                                {{question}}
+                                <br>
+                                <br>
+                                {% define question.options as option_dict %}
+                                {% if question.question_type == 'Single Selection' %}
+                                {% for key, value in option_dict.items %}
+                                <div class="radio">
+                                    <label><input type="radio" name="{{question.pk}}" value="{{key}}"> {{value}}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                                {% else %}
+                                {% for key, value in option_dict.items %}
+                                <div class="checkbox">
+                                    <label><input type="checkbox" name="{{question.pk}}" value="{{key}}">
+                                        {{value}}</label>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <br>
+            <input type="submit" class="btn btn-success" value="Submit">
+    </form>
+</div>
+<script>
+    total_ques = "{{ exam_obj.question_count }}"
+    function setcarouselActive(carousel_id) {
+        var currentIndex = $('div.active').index() + 1;
+        $('#carousel-' + currentIndex).removeClass('active');
+        $('#carousel-' + carousel_id).addClass('active')
+        var pageIndex = $('li.active').index();
+        $('#' + currentIndex).parent().removeClass('active');
+        $('#' + carousel_id).parent().addClass('active')
+    }
+    function carouselChangeNext() {
+        var currentIndex = $('div.active').index() + 2;
+        if (currentIndex <= total_ques) {
+            var pageIndex = $('li.active').index();
+            $('#' + pageIndex).parent().removeClass('active');
+            $('#' + currentIndex).parent().addClass('active')
+        }
+    }
+    function carouselChangePrev() {
+        var currentIndex = $('div.active').index();
+        if (currentIndex > 0) {
+            var pageIndex = $('li.active').index();
+            $('#' + pageIndex).parent().removeClass('active');
+            $('#' + currentIndex).parent().addClass('active')
+        }
+    }
+</script>
+{% endblock %}
