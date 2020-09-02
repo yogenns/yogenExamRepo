@@ -37,9 +37,9 @@
                     {% else %}
                     <div id="carousel-{{forloop.counter}}" class="carousel-item ">
                         {% endif %}
-                        <div class="card col-md-3">
+                        <div class="card col-md-12">
                             <div class="card-body">
-                                {{question}}
+                                {{question|linebreaksbr}}
                                 <br>
                                 <br>
                                 {% define question.options as option_dict %}
