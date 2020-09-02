@@ -1,7 +1,8 @@
+import datetime
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView, CreateView, DeleteView, ListView
+from django.views.generic import TemplateView, CreateView, DeleteView, ListView, View
 from django.urls import reverse_lazy
 from . import forms
 from . import models
@@ -74,7 +75,8 @@ class CreateQuestionView(SuperUserRequiredMixin, FormView):
     def form_valid(self, form):
         question = models.Question()
         question.question = form.cleaned_data.get('question')
-        question.answer = form.cleaned_data.get('answer')
+        answer_list = form.cleaned_data.get('answer')
+        question.answer = list(answer_list.split(','))
         question._question_type = form.cleaned_data.get('question_type')
         question.topic = form.cleaned_data.get('topic')
         question.explaination = form.cleaned_data.get('explaination')
@@ -176,8 +178,64 @@ class StartExamView(LoginRequiredMixin, TemplateView):
     def post(self, request, **kwargs):
         exam_id = request.POST.get('exam-id')
         context = self.get_context_data()
-        context['exam_obj'] = get_object_or_404(models.Exam, pk=exam_id)
+        exam_obj = get_object_or_404(models.Exam, pk=exam_id)
+        exam_attempt = models.ExamAttempt()
+        exam_attempt.start_time = datetime.datetime.now()
+        exam_attempt.end_time = datetime.datetime.now()
+        exam_attempt.exam = exam_obj
+        exam_attempt.user = self.request.user
+        exam_attempt.save()
+        context['exam_obj'] = exam_obj
+        context['exam_attempt_id'] = exam_attempt.pk
         return render(request, self.template_name, context)
+
+    def get(self, request, **kwargs):
+        return HttpResponseRedirect('/')
+
+
+class SubmitExamView(LoginRequiredMixin, View):
+
+    def post(self, request, **kwargs):
+        exam_attempt_id = request.POST.get('exam_attempt_id')
+        exam_attempt_obj = get_object_or_404(
+            models.ExamAttempt, pk=exam_attempt_id)
+        exam_attempt_obj.end_time = datetime.datetime.now()
+        # Set the Anwser List Here.
+        # {'que_id':['ans1','ans2'],}
+        answer_dict = {}
+        result_attempted_question_count = 0
+        result_correct_answer_count = 0
+        for question in exam_attempt_obj.exam.questions.all():
+            ans_list = request.POST.getlist(str(question.pk))
+
+            if len(ans_list) > 0:
+                result_attempted_question_count += 1
+                ans_list.sort()
+                actual_ans = eval(question.answer)
+                if actual_ans == ans_list:
+                    result_correct_answer_count += 1
+
+            answer_dict[question.pk] = ans_list
+        exam_attempt_obj.answer_list = answer_dict
+
+        # Perform Analysis
+        exam_attempt_obj.result_attempted_question_count = result_attempted_question_count
+        exam_attempt_obj.result_correct_answer_count = result_correct_answer_count
+        exam_attempt_obj.result_percentage = (
+            result_correct_answer_count / exam_attempt_obj.exam.question_count) * 100
+        print("resPecentage "+str(exam_attempt_obj.result_percentage))
+        print("resCorrect "+str(exam_attempt_obj.result_correct_answer_count))
+        print("resAttempted "+str(exam_attempt_obj.result_attempted_question_count))
+        passing_percentage = exam_attempt_obj.exam.passing_percentage
+
+        if exam_attempt_obj.result_percentage >= passing_percentage:
+            exam_attempt_obj._result_status = 'P'
+        else:
+            exam_attempt_obj._result_status = 'F'
+
+        exam_attempt_obj.save()
+        return HttpResponseRedirect('/')
+        # return HttpResponseRedirect('/user/result/'+str(exam_attempt_id))
 
     def get(self, request, **kwargs):
         return HttpResponseRedirect('/')

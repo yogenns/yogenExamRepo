@@ -3,6 +3,8 @@
 {% block body_block %}
 <div class="container">
     <form id="f1" name="f1" method="POST" action="/submit_exam/">
+        {% csrf_token %}
+        <input type="hidden" name="exam_attempt_id" value="{{exam_attempt_id}}">
         <nav aria-label="PageNavigation" class="page-nav">
             <ul class="pagination">
                 <li class="page-item ">

@@ -51,6 +51,11 @@ class CreateQuestionForm(forms.Form):
     explaination = forms.CharField(widget=forms.Textarea(
         attrs={'placeholder': 'Provide Explaination'}))
 
+    def clean(self):
+        if self.cleaned_data['question_type'] == 'S' and len(self.cleaned_data['answer']) != 1:
+            raise forms.ValidationError(
+                "For Single Selection only 1 Answer is accepted")
+
 
 class CreateExamForm(forms.ModelForm):
 
@@ -107,7 +112,7 @@ class CreateExamForm(forms.ModelForm):
                         'id', flat=True).filter(topic__in=topics))
                     print(ids)
                     if que_count > len(ids):
-                        raise ValidationError(
+                        raise forms.ValidationError(
                             {'question_count': ["Question Count {} is bigger than available questions {} for given Selected Criteria".format(que_count, len(ids)), ]})
                     rand_ids = random.sample(ids, que_count)
                 else:
