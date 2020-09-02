@@ -50,10 +50,12 @@ class ExamAttempt(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     answer_list = models.TextField()
-    result_attempted_question_count = models.PositiveSmallIntegerField()
-    result_correct_answer_count = models.PositiveSmallIntegerField()
-    result_percentage = models.PositiveSmallIntegerField(
-        validators=[MaxValueValidator(100), MinValueValidator(0)])
+    result_attempted_question_count = models.PositiveSmallIntegerField(
+        blank=True, null=True)
+    result_correct_answer_count = models.PositiveSmallIntegerField(
+        blank=True, null=True)
+    result_percentage = models.PositiveSmallIntegerField(blank=True, null=True,
+                                                         validators=[MaxValueValidator(100), MinValueValidator(0)])
     _result_status = models.CharField(max_length=1, choices=RESULT_STATUS)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
