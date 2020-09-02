@@ -18,3 +18,9 @@
     color: rgb(160, 29, 29);
     font-size: x-large;
 }
+.FAIL{
+    color: red;
+}
+.PASS{
+    color: green;
+}

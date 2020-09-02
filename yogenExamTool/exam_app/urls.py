@@ -20,4 +20,6 @@ urlpatterns = [
     url('^exam/delete/$', views.DeleteExamView.as_view(), name='exam_delete'),
     url('^start/$', views.StartExamView.as_view(), name='exam_start'),
     url('^submit_exam/$', views.SubmitExamView.as_view(), name='submit_exam'),
+    url('^user/result/(?P<pk>\d+)/$',
+        views.ViewExamResultDetailView.as_view(), name='view_result'),
 ]

@@ -2,7 +2,7 @@ import datetime
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView, CreateView, DeleteView, ListView, View
+from django.views.generic import TemplateView, CreateView, DeleteView, ListView, View, DetailView
 from django.urls import reverse_lazy
 from . import forms
 from . import models
@@ -234,8 +234,18 @@ class SubmitExamView(LoginRequiredMixin, View):
             exam_attempt_obj._result_status = 'F'
 
         exam_attempt_obj.save()
-        return HttpResponseRedirect('/')
-        # return HttpResponseRedirect('/user/result/'+str(exam_attempt_id))
+        return HttpResponseRedirect('/user/result/'+str(exam_attempt_id))
 
     def get(self, request, **kwargs):
         return HttpResponseRedirect('/')
+
+
+class ViewExamResultDetailView(LoginRequiredMixin, DetailView):
+    model = models.ExamAttempt
+    template_name = 'exam_app/result_detail.html'
+
+    def get_queryset(self):
+        #user = self.request.user
+        queryset = super().get_queryset()
+        queryset = queryset.filter(pk=self.kwargs.get('pk'))
+        return queryset

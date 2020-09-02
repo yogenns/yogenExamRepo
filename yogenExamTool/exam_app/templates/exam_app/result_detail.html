@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load exam_filters %}
+{% block body_block %}
+<div class="container">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Exam Result -
+                <span class="{{examattempt.result_status}}">{{examattempt.result_status}}</span>
+            </h1>
+            <p class="lead">
+                Total Questions -{{examattempt.exam.question_count}}
+                <br>
+                Passing Percentage - {{examattempt.exam.passing_percentage}} %
+                <br>
+                Attempted Answers - {{examattempt.result_attempted_question_count}}
+                <br>
+                Correct Answers - {{examattempt.result_correct_answer_count}}
+                <br>
+                Percentage - {{examattempt.result_percentage}} %
+            </p>
+
+            <p class="lead">
+                Exam "{{examattempt.exam }}" attempted by user "{{examattempt.user}}" at {{examattempt.start_time}}
+                <br>
+                Time Taken {{examattempt.start_time|timesince:examattempt.end_time }}
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
