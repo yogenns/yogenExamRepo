@@ -35,7 +35,7 @@
                             <a class="dropdown-item" href="{% url 'exam_app:questions' %}">Questions</a>
                             {% else %}
                             <a class="dropdown-item" href="#">Exams</a>
-                            <a class="dropdown-item" href="#">History</a>
+                            <a class="dropdown-item" href="{% url 'exam_app:history' %}">History</a>
                             {% endif %}
                         </div>
                     </li>

@@ -249,3 +249,15 @@ class ViewExamResultDetailView(LoginRequiredMixin, DetailView):
         queryset = super().get_queryset()
         queryset = queryset.filter(pk=self.kwargs.get('pk'))
         return queryset
+
+
+class ListExamAttemptHistoryView(LoginRequiredMixin, ListView):
+    paginate_by = 10
+    model = models.ExamAttempt
+    template_name = 'exam_app/exam_attempt_history.html'
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return models.ExamAttempt.objects.all().order_by('-pk')
+        else:
+            return models.ExamAttempt.objects.filter(user=self.request.user).order_by('-pk')

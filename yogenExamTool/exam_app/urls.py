@@ -22,4 +22,5 @@ urlpatterns = [
     url('^submit_exam/$', views.SubmitExamView.as_view(), name='submit_exam'),
     url('^user/result/(?P<pk>\d+)/$',
         views.ViewExamResultDetailView.as_view(), name='view_result'),
+    url('^history/$', views.ListExamAttemptHistoryView.as_view(), name='history'),
 ]
