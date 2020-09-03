@@ -2,7 +2,8 @@
 {% load exam_filters %}
 {% block body_block %}
 <div class="container">
-    <form id="f1" name="f1" method="POST" action="/submit_exam/">
+    <p id="exam_timer"></p>
+    <form id="exam-form" name="exam-form" method="POST" action="/submit_exam/">
         {% csrf_token %}
         <input type="hidden" name="exam_attempt_id" value="{{exam_attempt_id}}">
         <nav aria-label="PageNavigation" class="page-nav">
@@ -70,6 +71,39 @@
     </form>
 </div>
 <script>
+    var exam_start_time = "{{ exam_start_time }}"
+    var duration_hours = "{{ exam_obj.time|time:'H' }}"
+    var duration_minutes = "{{ exam_obj.time|time:'i' }}"
+    var dt_now = new Date();
+    dt_now.setHours(dt_now.getHours() + Number(duration_hours));
+    dt_now.setMinutes(dt_now.getMinutes() + Number(duration_minutes));
+    document.getElementById("exam_timer").innerHTML = Number(duration_hours) + "h "
+        + Number(duration_minutes) + "m 00s ";
+    var x = setInterval(function () {
+
+        // Get today's date and time
+        var now = new Date();
+
+        // Find the distance between now and the count down date
+        var distance = dt_now - now;
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("exam_timer").innerHTML = hours + "h "
+            + minutes + "m " + seconds + "s ";
+
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("exam_timer").innerHTML = "EXPIRED";
+            var exam_form = document.getElementById('exam-form')
+            exam_form.submit();
+        }
+    }, 1000);
+
+
+
+
     total_ques = "{{ exam_obj.question_count }}"
     function setcarouselActive(carousel_id) {
         var currentIndex = $('div.active').index() + 1;

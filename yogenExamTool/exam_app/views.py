@@ -187,6 +187,7 @@ class StartExamView(LoginRequiredMixin, TemplateView):
         exam_attempt.save()
         context['exam_obj'] = exam_obj
         context['exam_attempt_id'] = exam_attempt.pk
+        context['exam_start_time'] = exam_attempt.start_time
         return render(request, self.template_name, context)
 
     def get(self, request, **kwargs):
