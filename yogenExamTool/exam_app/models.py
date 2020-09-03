@@ -61,4 +61,7 @@ class ExamAttempt(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
 
     def result_status(self):
-        return (dict(self.RESULT_STATUS))[self._result_status]
+        if self._result_status == '':
+            return "No Result"
+        else:
+            return (dict(self.RESULT_STATUS))[self._result_status]
