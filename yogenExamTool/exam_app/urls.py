@@ -23,4 +23,6 @@ urlpatterns = [
     url('^user/result/(?P<pk>\d+)/$',
         views.ViewExamResultDetailView.as_view(), name='view_result'),
     url('^history/$', views.ListExamAttemptHistoryView.as_view(), name='history'),
+    url('^user/result/detail/(?P<pk>\d+)/$',
+        views.ViewExamResultMoreDetailView.as_view(), name='view_result_detail'),
 ]

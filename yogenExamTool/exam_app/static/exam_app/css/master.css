@@ -24,3 +24,19 @@
 .PASS{
     color: green;
 }
+.question-result-detail-card{
+    margin : 10px;
+    padding: 20px 20px 20px;
+    text-align: left; 
+    vertical-align: middle;
+    background-color: #6384b6c7;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
+    -moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
+  }
+.Wrong{
+    color: red;
+}
+.Correct{
+    color: green;
+}

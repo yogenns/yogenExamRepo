@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load exam_filters %}
+{% block body_block %}
+{% for question in examattempt.exam.questions.all %}
+<div class="col-lg-12 col-md-12 card-block question-result-detail-card">
+    <p>
+        {% define examattempt.answer_list as answered_list %}
+        Que {{forloop.counter}}
+        {% if answered_list|get_item:question.pk|correct_or_wrong:question.answer == "Correct" %}
+        <span class="Correct">Correct</span>
+        {% else %}
+        <span class="Wrong">Wrong</span>
+        {% endif %}
+        <br>
+        {{question}}
+        <br>
+
+        You answered : {{answered_list|get_item:question.pk}}
+        {% define question.options as option_dict %}
+
+
+        {% if question.question_type == 'Single Selection' %}
+        {% for key, value in option_dict.items %}
+
+    <div class="radio">
+        <label>{{key}}
+            {% if answered_list|get_item:question.pk|contain:key %}
+            <input type="radio" name="{{question.pk}}" value="{{key}}" checked>
+            {%else%}
+            <input type="radio" name="{{question.pk}}" value="{{key}}">
+            {% endif %}
+            {{value}}
+        </label>
+    </div>
+    {% endfor %}
+    {% else %}
+    {% for key, value in option_dict.items %}
+    <div class="checkbox">
+        <label>{{key}}
+            {% if answered_list|get_item:question.pk|contain:key %}
+            <input type="checkbox" name="{{question.pk}}" value="{{key}}" checked>
+            {%else%}
+            <input type="checkbox" name="{{question.pk}}" value="{{key}}">
+            {% endif %}
+            {{value}}</label>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <br>
+    Correct Answer(s) : {{question.answer}}
+    <br>
+    Explaination : {{question.explaination}}</p>
+</div>
+{% endfor %}
+{% endblock %}
