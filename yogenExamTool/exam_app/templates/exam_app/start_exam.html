@@ -2,7 +2,7 @@
 {% load exam_filters %}
 {% block body_block %}
 <div class="container">
-    <p id="exam_timer"></p>
+    <div class="exam-timer-div">Time Left : <span id="exam_timer" class="exam-timer"></span></div>
     <form id="exam-form" name="exam-form" method="POST" action="/submit_exam/">
         {% csrf_token %}
         <input type="hidden" name="exam_attempt_id" value="{{exam_attempt_id}}">
@@ -93,6 +93,14 @@
         document.getElementById("exam_timer").innerHTML = hours + "h "
             + minutes + "m " + seconds + "s ";
 
+        if (minutes < 5) {
+            document.getElementById("exam_timer").classList.remove('exam-timer');
+            document.getElementById("exam_timer").classList.add('exam-timer-red');
+        }
+        if (minutes <= 0 && seconds <= 30) {
+            document.getElementById("exam_timer").classList.remove('exam-timer-red');
+            document.getElementById("exam_timer").classList.add('exam-timer-flash');
+        }
         if (distance < 0) {
             clearInterval(x);
             document.getElementById("exam_timer").innerHTML = "EXPIRED";
@@ -100,8 +108,6 @@
             exam_form.submit();
         }
     }, 1000);
-
-
 
 
     total_ques = "{{ exam_obj.question_count }}"
