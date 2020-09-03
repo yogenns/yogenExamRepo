@@ -24,21 +24,15 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="nav nabar-nav mr-auto">
                     {% if user.is_authenticated %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">Manage</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            {% if user.is_superuser %}
-                            <a class="dropdown-item" href="{% url 'exam_app:create_exam' %}">Add Exam</a>
-                            <a class="dropdown-item" href="{% url 'exam_app:topic' %}">Add Topic</a>
-                            <a class="dropdown-item" href="{% url 'exam_app:create_question' %}">Add Question</a>
-                            <a class="dropdown-item" href="{% url 'exam_app:exams' %}">Exams</a>
-                            <a class="dropdown-item" href="{% url 'exam_app:questions' %}">Questions</a>
-                            {% else %}
-                            <a class="dropdown-item" href="#">Exams</a>
-                            <a class="dropdown-item" href="{% url 'exam_app:history' %}">History</a>
-                            {% endif %}
-                        </div>
-                    </li>
+                    {% if user.is_superuser %}
+                    <li><a class="btn btn-simple" href="{% url 'exam_app:create_exam' %}">Add Exam</a></li>
+                    <li><a class="btn btn-simple" href="{% url 'exam_app:topic' %}">Add Topic</a></li>
+                    <li><a class="btn btn-simple" href="{% url 'exam_app:create_question' %}">Add Question</a></li>
+                    <li><a class="btn btn-simple" href="{% url 'exam_app:exams' %}">Exams</a></li>
+                    <li><a class="btn btn-simple" href="{% url 'exam_app:questions' %}">Questions</a></li>
+                    {% else %}
+                    <li><a class="btn btn-simple" href="{% url 'exam_app:history' %}">History</a></li>
+                    {% endif %}
                     {% endif %}
                 </ul>
                 <ul class="nav nabar-nav navbar-right">
