@@ -1,35 +1,44 @@
 {% extends "base.html" %}
 {% load exam_filters %}
 {% block body_block %}
+<style>
+    .pagination {
+        display: inline-block;
+    }
+
+    .pagination a {
+        float: left;
+        padding: 5px 5px;
+        margin: 2px;
+    }
+</style>
 <div class="container">
     <div class="exam-timer-div">Time Left : <span id="exam_timer" class="exam-timer"></span></div>
     <form id="exam-form" name="exam-form" method="POST" action="/submit_exam/">
         {% csrf_token %}
         <input type="hidden" name="exam_attempt_id" value="{{exam_attempt_id}}">
-        <nav aria-label="PageNavigation" class="page-nav">
-            <ul class="pagination">
-                <li class="page-item ">
-                    <a class="page-link" href="#carouselExampleIndicators" role="button" data-slide="prev" tabindex="-1"
-                        onclick="carouselChangePrev()">Previous</a>
-                </li>
-                {% for num in exam_obj.question_count|times %}
-                {% if 1 == num %}
-                <li class="page-item active"><a class="page-link" id="{{num}}" href="#"
-                        onclick="setcarouselActive(this.id)">{{num}}<span class="sr-only">(current)</span></a>
-                </li>
-                {% else %}
-                <li class="page-item"><a class="page-link" id="{{num}}" href="#"
-                        onclick="setcarouselActive(this.id)">{{num}}</a>
-                </li>
-                {% endif %}
-                {% endfor %}
+        <div class="pagination col-md-12">
+            <li class="page-item ">
+                <a class="page-link" href="#carouselExampleIndicators" role="button" data-slide="prev" tabindex="-1"
+                    onclick="carouselChangePrev()">Previous</a>
+            </li>
+            {% for num in exam_obj.question_count|times %}
+            {% if 1 == num %}
+            <li class="page-item active"><a class="page-link" id="{{num}}" href="#"
+                    onclick="setcarouselActive(this.id)">{{num}}<span class="sr-only">(current)</span></a>
+            </li>
+            {% else %}
+            <li class="page-item"><a class="page-link" id="{{num}}" href="#"
+                    onclick="setcarouselActive(this.id)">{{num}}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
 
-                <li class="page-item">
-                    <a class="page-link" href="#carouselExampleIndicators" role="button" data-slide="next"
-                        onclick="carouselChangeNext()">Next</a>
-                </li>
-            </ul>
-        </nav>
+            <li class="page-item">
+                <a class="page-link" href="#carouselExampleIndicators" role="button" data-slide="next"
+                    onclick="carouselChangeNext()">Next</a>
+            </li>
+        </div>
         <div id="carouselExampleIndicators" class="carousel" data-interval="false" data-wrap="false">
             <div class="carousel-inner">
                 {% for question in exam_obj.questions.all %}

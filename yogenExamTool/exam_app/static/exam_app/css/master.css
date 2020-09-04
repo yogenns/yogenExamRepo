@@ -78,5 +78,7 @@
     100% {background-color:rgb(255, 0, 200); }
   }
 .exam-timer-div{
-    position: relative;float: right;
+    position: relative;
+    float: right;
+    margin: 4px;
 }
