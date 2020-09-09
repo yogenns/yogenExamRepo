@@ -8,3 +8,10 @@ User will get to choose the Exam and start an Exam.
 Run below command to install requirements
 pip install -r requirements.txt
 
+Create a SuperUser. This user will be admin.
+python manage.py createsuperuser
+
+Execute Migrate command to make DB changes
+python manage.py migrate
+
+
