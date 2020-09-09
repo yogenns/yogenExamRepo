@@ -94,6 +94,8 @@ class CreateQuestionView(SuperUserRequiredMixin, FormView):
         question.options = options
         print(question)
         question.save()
+        question.question_image = form.cleaned_data.get('question_image')
+        question.save()
         messages.success(self.request, 'Question Added successfully')
         return super().form_valid(form)
 

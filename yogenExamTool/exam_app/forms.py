@@ -31,6 +31,8 @@ class CreateQuestionForm(forms.Form):
         ('S', 'Single Selection')
     )
     question = forms.CharField(widget=forms.Textarea)
+    question_image = forms.ImageField(
+        required=False, label="Image for Question (Optional)")
     option_field_A = forms.CharField(widget=forms.TextInput(
         attrs={'placeholder': 'Enter Option'}), label="Option 'A'")
     option_field_B = forms.CharField(widget=forms.TextInput(

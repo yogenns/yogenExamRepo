@@ -11,12 +11,19 @@ class Topic(models.Model):
         return self.name
 
 
+def question_img_path(instance, filename):
+    ext = filename.split('.')[-1]
+    # Model must be saved before Adding Image. Only one image is accepted and image name must be primary key
+    return 'exam_app/{}.{}'.format(instance.pk, ext)
+
+
 class Question(models.Model):
     QUESTION_TYPES = (
         ('M', 'Multiple Selection'),
         ('S', 'Single Selection')
     )
     question = models.TextField()
+    question_image = models.ImageField(upload_to=question_img_path, default='')
     options = models.TextField()  # Store Dict of applicable choices
     answer = models.TextField()  # Store List of applicable choices
     _question_type = models.CharField(max_length=1, choices=QUESTION_TYPES)

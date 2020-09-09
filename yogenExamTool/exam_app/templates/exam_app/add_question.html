@@ -8,7 +8,7 @@
 {% endif %}
 {% endfor %}
 {% endif %}
-<form name="f1" id="f1" method="POST">
+<form name="f1" id="f1" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% bootstrap_form form %}
     <input type="submit" class="btn btn-success" value="Add">
