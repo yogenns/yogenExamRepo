@@ -26,7 +26,12 @@
             <th scope="row">
                 <input type="checkbox" class="largerCheckbox" id="{{ question.pk}}" onchange="setSelection(this)">
             </th>
-            <td>{{ question.question}}</td>
+            <td>{{ question.question}}
+                <br>
+                {% if question.question_image %}
+                <img class="coverImgSmall" src="/media/{{question.question_image}}">
+                {% endif %}
+            </td>
             <td>{{ question.options}}</td>
             <td>{{ question.answer}}</td>
             <td>{{ question.question_type}}</td>

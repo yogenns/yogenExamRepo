@@ -1,6 +1,8 @@
 from django.conf.urls import url
 from . import views
 from django.contrib.auth import views as auth_views
+from django.conf.urls.static import static
+from django.conf import settings
 
 app_name = 'exam_app'
 
@@ -25,4 +27,4 @@ urlpatterns = [
     url('^history/$', views.ListExamAttemptHistoryView.as_view(), name='history'),
     url('^user/result/detail/(?P<pk>\d+)/$',
         views.ViewExamResultMoreDetailView.as_view(), name='view_result_detail'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

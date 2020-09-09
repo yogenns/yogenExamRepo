@@ -82,3 +82,7 @@
     float: right;
     margin: 4px;
 }
+.coverImgSmall{
+    height: 50px;
+    width: 50px;
+}
