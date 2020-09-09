@@ -1,0 +1,6 @@
+/yogenExamTool/yogenExamTool/__pycache__/
+/yogenExamTool/exam_app/__pycache__/
+/yogenExamTool/exam_app/templatetags/__pycache__/
+/yogenExamTool/exam_app/migrations/__pycache__/
+/yogenExamTool/media/
+/yogenExamTool/db.sqlite3
